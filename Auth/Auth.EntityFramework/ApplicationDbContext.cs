@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Auth.Domain.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace Auth.EntityFramework
     {
         public ApplicationDbContext(DbContextOptions options):base(options)
         { }
-        
 
+        public DbSet<User> Users { get; set; }
     }
 }
