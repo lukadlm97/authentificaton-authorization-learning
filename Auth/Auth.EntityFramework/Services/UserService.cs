@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Auth.EntityFramework.Services
 {
@@ -19,7 +20,7 @@ namespace Auth.EntityFramework.Services
         }
 
 
-        public User Authenticate(string username, string password)
+        public async Task<User> Authenticate(string username, string password)
         {
             
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
@@ -62,7 +63,7 @@ namespace Auth.EntityFramework.Services
 
      
 
-        public User Create(User user, string password)
+        public async Task<User> Create(User user, string password)
         {
             if (string.IsNullOrWhiteSpace(password))
                 throw new InvalidPasswordException();
@@ -103,7 +104,7 @@ namespace Auth.EntityFramework.Services
             throw new NotImplementedException();
         }
 
-        public IEnumerable<User> GetAll()
+        public async Task<IEnumerable<User>> GetAll()
         {
             using(ApplicationDbContext context = _context.CreateDbContext(null) )
             {
@@ -113,7 +114,7 @@ namespace Auth.EntityFramework.Services
             }
         }
 
-        public User GetById(int id)
+        public async Task<User> GetById(int id)
         {
             using (ApplicationDbContext context = _context.CreateDbContext(null))
             {
