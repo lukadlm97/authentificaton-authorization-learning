@@ -107,7 +107,9 @@ namespace Auth.EntityFramework.Services
         {
             using(ApplicationDbContext context = _context.CreateDbContext(null) )
             {
-                return context.Users;
+                IEnumerable<User> users = context.Users.ToList();
+
+                return users;
             }
         }
 
