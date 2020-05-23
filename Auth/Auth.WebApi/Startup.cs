@@ -14,6 +14,8 @@ using Auth.EntityFramework.Services;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using Auth.WebApi.Helper;
+using Auth.EntityFramework;
+
 
 namespace Auth.WebApi
 {
@@ -42,6 +44,15 @@ namespace Auth.WebApi
                         .AllowAnyMethod();
                     });
             });
+
+            var mappingConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new AutoMapperProfile());
+            });
+
+            IMapper mapper = mappingConfig.CreateMapper();
+            services.AddSingleton(mapper);
+
 
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
@@ -84,6 +95,9 @@ namespace Auth.WebApi
             });
 
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<DesignTimeDbContextFactory>();
+           
+            services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -97,10 +111,12 @@ namespace Auth.WebApi
 
             app.UseCors(MyAllowSpecificOrigins);
 
+            
+            
             app.UseRouting();
-
+           
             app.UseAuthentication();
-
+            app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

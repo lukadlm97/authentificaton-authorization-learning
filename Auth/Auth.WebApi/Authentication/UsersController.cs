@@ -14,6 +14,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Auth.WebApi.Authentication
@@ -27,11 +28,11 @@ namespace Auth.WebApi.Authentication
         private IMapper _mapper;
         private readonly AppSettings _appSettings;
 
-        public UsersController(IUserService userService, IMapper mapper, AppSettings appSettings)
+        public UsersController(IUserService userService, IMapper mapper, IOptions<AppSettings> appSettings)
         {
             _userService = userService;
             _mapper = mapper;
-            _appSettings = appSettings;
+            _appSettings = appSettings.Value;
         }
 
         [AllowAnonymous]
