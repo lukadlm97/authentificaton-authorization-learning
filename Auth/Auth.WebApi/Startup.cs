@@ -15,7 +15,8 @@ using System.Text;
 using Microsoft.Extensions.Configuration;
 using Auth.WebApi.Helper;
 using Auth.EntityFramework;
-
+using Auth.Domain.Models;
+using Auth.WebApi.EMailService;
 
 namespace Auth.WebApi
 {
@@ -57,6 +58,8 @@ namespace Auth.WebApi
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
 
+
+
             // configure jwt authentication
             var appSettings = appSettingsSection.Get<AppSettings>();
             var key = Encoding.ASCII.GetBytes(appSettings.Secret);
@@ -93,8 +96,12 @@ namespace Auth.WebApi
                     ValidateAudience = false
                 };
             });
+            services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
+
+
 
             services.AddScoped<IUserService, UserService>();
+           
             services.AddScoped<DesignTimeDbContextFactory>();
            
             services.AddControllers();

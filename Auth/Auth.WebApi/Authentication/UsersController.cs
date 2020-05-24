@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Auth.Domain.Models;
 using Auth.Domain.Services;
 using Auth.WebApi.Dtos;
+using Auth.WebApi.EMailService;
 using Auth.WebApi.Helper;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -27,12 +28,16 @@ namespace Auth.WebApi.Authentication
         private IUserService _userService;
         private IMapper _mapper;
         private readonly AppSettings _appSettings;
+   
 
-        public UsersController(IUserService userService, IMapper mapper, IOptions<AppSettings> appSettings)
+        public UsersController(IUserService userService, 
+            IMapper mapper, 
+            IOptions<AppSettings> appSettings)
         {
             _userService = userService;
             _mapper = mapper;
             _appSettings = appSettings.Value;
+           
         }
 
         [AllowAnonymous]
@@ -126,5 +131,12 @@ namespace Auth.WebApi.Authentication
             }
 
         }
+        [AllowAnonymous]
+        [HttpGet("sendmail")]
+        public IActionResult SendMail()
+        {
+            return Ok();
+        }
+
     }
 }

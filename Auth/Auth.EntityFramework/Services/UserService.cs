@@ -20,7 +20,7 @@ namespace Auth.EntityFramework.Services
         }
 
 
-        public async Task<User> Authenticate(string username, string password)
+        public  User Authenticate(string username, string password)
         {
             
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
@@ -158,5 +158,7 @@ namespace Auth.EntityFramework.Services
                 context.SaveChanges();
             }
         }
+
+       
     }
 }
