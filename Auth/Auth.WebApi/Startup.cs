@@ -16,7 +16,7 @@ using Microsoft.Extensions.Configuration;
 using Auth.WebApi.Helper;
 using Auth.EntityFramework;
 using Auth.Domain.Models;
-using Auth.WebApi.EMailService;
+using Auth.WebApi.EmailSender;
 
 namespace Auth.WebApi
 {
@@ -34,6 +34,13 @@ namespace Auth.WebApi
 
         public void ConfigureServices(IServiceCollection services)
         {
+            var emailConfig = Configuration
+                .GetSection("EmailConfiguration")
+                .Get<EmailConfiguration>();
+            services.AddSingleton(emailConfig);
+
+            services.AddSingleton<IEmailSender, EmailSender.EmailSender>();
+
             services.AddCors(option =>
             {
                 option.AddPolicy(MyAllowSpecificOrigins,
@@ -96,8 +103,7 @@ namespace Auth.WebApi
                     ValidateAudience = false
                 };
             });
-            services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
-
+           
 
 
             services.AddScoped<IUserService, UserService>();

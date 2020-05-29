@@ -9,7 +9,8 @@ using System.Threading.Tasks;
 using Auth.Domain.Models;
 using Auth.Domain.Services;
 using Auth.WebApi.Dtos;
-using Auth.WebApi.EMailService;
+using Auth.WebApi.EmailSender;
+using Auth.WebApi.EmailSender.Domain;
 using Auth.WebApi.Helper;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -28,15 +29,18 @@ namespace Auth.WebApi.Authentication
         private IUserService _userService;
         private IMapper _mapper;
         private readonly AppSettings _appSettings;
+        private IEmailSender _emailSender;
    
 
         public UsersController(IUserService userService, 
             IMapper mapper, 
-            IOptions<AppSettings> appSettings)
+            IOptions<AppSettings> appSettings,
+            IEmailSender emailSender)
         {
             _userService = userService;
             _mapper = mapper;
             _appSettings = appSettings.Value;
+            _emailSender = emailSender;
            
         }
 
@@ -135,7 +139,16 @@ namespace Auth.WebApi.Authentication
         [HttpGet("sendmail")]
         public IActionResult SendMail()
         {
-            return Ok();
+            try
+            {
+                var message = new Message(new string[] { "lukadlm97@gmail.com"},"Test","Some text.");
+                _emailSender.SendEmail(message);
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
     }
